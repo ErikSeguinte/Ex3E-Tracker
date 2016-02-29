@@ -13,7 +13,8 @@ class Character
 	int onslaught;
 	bool is_delayed;
     public:
-	Characters(std::string);
+	Character(std::string);
 
-}
+};
+#endif
 
