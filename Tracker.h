@@ -14,5 +14,6 @@ class Tracker
     public:
 	Tracker();
 	void add_character(std::string);
+	void print();
 };
 #endif

@@ -1,7 +1,7 @@
 all: tracker
 
 tracker: Tracker.o Character.o cli.o
-	g++ Tracker.o Character.o cli.o -o tracker.out
+	g++ -g -Wall Tracker.o Character.o cli.o -o tracker.out
 
 cli.o: cli.cpp Character.h
 	g++ -c cli.cpp

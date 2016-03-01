@@ -14,6 +14,8 @@ class Character
 	bool is_delayed;
     public:
 	Character(std::string);
+	std::string get_name()
+	{ return name;}
 
 };
 #endif
