@@ -2,7 +2,6 @@
 #include "Tracker.h"
 #include "Character.h"
 #include <vector>
-#include "Character.cpp"
 Tracker::Tracker()
 {
     std::vector<Character> *character_list;
