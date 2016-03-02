@@ -13,17 +13,22 @@ GUI = -I./gui
 
 all: tracker
 
-tracker: Tracker.o Character.o cli.o
+tracker: Tracker.o Character.o gui.o
 	$(CXX) $(CXXFLAGS) Tracker.o Character.o cli.o -o tracker.out
 
-cli.o: cli.cpp Character.h
-	$(CXX) $(CXXFLAGS) -c cli.cpp
+gui.o: gui.cpp Character.h gui 
+	$(CXX) $(CXXFLAGS) -c gui.cpp
 
 Tracker.o: Tracker.cpp Tracker.h Character.h Character.cpp
 	$(CXX) $(CXXFLAGS) -c Tracker.cpp Character.cpp
 
 Character.o: Character.cpp Character.h
 	$(CXX) $(CXXFLAGS) -c Character.cpp
+
+.PHONY: gui
+gui:
+	$(MAKE) -C ./gui
+
 
 clean:
 	rm *.o *.out
