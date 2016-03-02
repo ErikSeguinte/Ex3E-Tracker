@@ -57,6 +57,11 @@ flags = [
 # For a C project, you would set this to 'c' instead of 'c++'.
 '-x',
 'c++',
+'-isystem', '/usr/include/x86_64-linux-gnu/qt5',
+'-isystem', '/usr/include/x86_64-linux-gnu/qt5/QtWidgets',
+'-isystem', '/usr/include/x86_64-linux-gnu/qt5/QtGui',
+'-isystem', '/usr/include/x86_64-linux-gnu/qt5/QtCore',
+'-fPIC',
 #'-isystem',
 #'../BoostParts',
 #'-isystem',
