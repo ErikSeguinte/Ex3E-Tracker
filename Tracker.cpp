@@ -20,6 +20,6 @@ void Tracker::print()
 
     for (iter = character_list.begin(); iter < character_list.end(); iter++)
     {
-	std::cout << iter->get_name() << "\n";
+//	std::cout << iter->get_name() << "\n";
     }
 }
