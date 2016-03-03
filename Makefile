@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC -std=c++11 $(DEFINES)
+CXXFLAGS      = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
@@ -50,10 +50,11 @@ OBJECTS_DIR   = ./
 
 SOURCES       = Character.cpp \
 		gui.cpp \
-		Tracker.cpp 
+		Tracker.cpp moc_gui.cpp
 OBJECTS       = Character.o \
 		gui.o \
-		Tracker.o
+		Tracker.o \
+		moc_gui.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -109,8 +110,19 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		Ex3E-Tracker.pro Character.h \
+		gui.h \
 		Tracker.h \
-		ui_main_window.h Character.cpp \
+		ui_About_gui.h \
+		ui_attack_gui.h \
+		ui_character_picker_ui.h \
+		ui_custom_gambit.h \
+		ui_decisive_gui.h \
+		ui_join_battle_gui.h \
+		ui_main_window.h \
+		ui_Modification_Window.h \
+		ui_new_character_ui.h \
+		ui_other_action_gui.h \
+		ui_preferences_window.h Character.cpp \
 		gui.cpp \
 		Tracker.cpp
 QMAKE_TARGET  = Ex3E-Tracker
@@ -274,7 +286,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents Character.h Tracker.h ui_main_window.h $(DISTDIR)/
+	$(COPY_FILE) --parents Character.h gui.h Tracker.h ui_About_gui.h ui_attack_gui.h ui_character_picker_ui.h ui_custom_gambit.h ui_decisive_gui.h ui_join_battle_gui.h ui_main_window.h ui_Modification_Window.h ui_new_character_ui.h ui_other_action_gui.h ui_preferences_window.h $(DISTDIR)/
 	$(COPY_FILE) --parents Character.cpp gui.cpp Tracker.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents gui/About_gui.ui gui/attack_gui.ui gui/character_picker_ui.ui gui/custom_gambit.ui gui/decisive_gui.ui gui/join_battle_gui.ui gui/main_window.ui gui/Modification_Window.ui gui/new_character_ui.ui gui/other_action_gui.ui gui/preferences_window.ui $(DISTDIR)/
 
@@ -299,8 +311,23 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_gui.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_gui.cpp
+moc_gui.cpp: ui_About_gui.h \
+		ui_attack_gui.h \
+		ui_character_picker_ui.h \
+		ui_custom_gambit.h \
+		ui_decisive_gui.h \
+		ui_join_battle_gui.h \
+		ui_main_window.h \
+		ui_Modification_Window.h \
+		ui_new_character_ui.h \
+		ui_other_action_gui.h \
+		ui_preferences_window.h \
+		gui.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/primefactorx01/c++/Ex3E-Tracker -I/home/primefactorx01/c++/Ex3E-Tracker -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include gui.h -o moc_gui.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all: ui_About_gui.h ui_attack_gui.h ui_character_picker_ui.h ui_custom_gambit.h ui_decisive_gui.h ui_join_battle_gui.h ui_main_window.h ui_Modification_Window.h ui_new_character_ui.h ui_other_action_gui.h ui_preferences_window.h
@@ -345,19 +372,33 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_uic_clean 
+compiler_clean: compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
 Character.o: Character.cpp Character.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Character.o Character.cpp
 
-gui.o: gui.cpp ui_main_window.h
+gui.o: gui.cpp gui.h \
+		ui_About_gui.h \
+		ui_attack_gui.h \
+		ui_character_picker_ui.h \
+		ui_custom_gambit.h \
+		ui_decisive_gui.h \
+		ui_join_battle_gui.h \
+		ui_main_window.h \
+		ui_Modification_Window.h \
+		ui_new_character_ui.h \
+		ui_other_action_gui.h \
+		ui_preferences_window.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gui.o gui.cpp
 
 Tracker.o: Tracker.cpp Tracker.h \
 		Character.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Tracker.o Tracker.cpp
+
+moc_gui.o: moc_gui.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_gui.o moc_gui.cpp
 
 ####### Install
 

@@ -1,12 +1,19 @@
 #include <QApplication>
 #include <QWidget>
-#include"ui_main_window.h"
+#include "gui.h"
+
 int main(int argc, char *argv[]) {
         
         QApplication app(argc, argv);
-
-	QMainWindow window;
-	Ui_MainWindow mainwindow();	
-	window = mainwindow;
+	Main_Window *w = new Main_Window;
+	w->show();
 	return app.exec();
 }
+
+Main_Window::Main_Window(QMainWindow *parent)
+    :QMainWindow(parent)
+{
+    setupUi(this);
+}
+
+Main_Window::~Main_Window(){};
