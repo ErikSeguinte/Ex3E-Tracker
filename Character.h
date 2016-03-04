@@ -3,6 +3,7 @@
 #define CHARACTER_H
 #include <string>
 
+class Character;
 struct character_data
 {
     	std::string name;
@@ -10,7 +11,7 @@ struct character_data
 	bool is_crashed;
 	int recently_crashed;
 	bool has_gone;
-	//Character *shift_target_ptr;
+	Character *shift_target_ptr;
 	int onslaught;
 	bool is_delayed;
 
@@ -27,10 +28,12 @@ class Character
 	Character *shift_target_ptr;
 	int onslaught;
 	bool is_delayed;
+	static int object_count;
+	int character_number;
     public:
 	//Constructors
+	Character();
 	Character(std::string);
-	
 	//Getters
 	std::string get_name();
 	int get_int();

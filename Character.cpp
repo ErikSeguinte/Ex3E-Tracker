@@ -1,6 +1,8 @@
 #include <string>
 #include "Character.h"
 
+Character::Character() : Character(("Character #" + std::to_string(object_count))) {}
+
 Character::Character(std::string name)
 {
     this->name = name;
@@ -11,7 +13,11 @@ Character::Character(std::string name)
     has_gone = false;
     onslaught = 0;
     is_delayed = false;
+    shift_target_ptr = nullptr;
+    character_number = object_count;
+    object_count++;
 }
+
 
 bool Character::check_for_crash( int damage)
 {
