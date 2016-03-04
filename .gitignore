@@ -283,3 +283,4 @@ Makefile
 
 ui_*.h
 moc_gui.cpp
+Makefile
