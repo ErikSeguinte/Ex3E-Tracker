@@ -19,4 +19,17 @@ public:
 	Main_Window(QMainWindow *parent = 0);
 	virtual ~Main_Window();
 
+	private slots:
+	void on_Withering_btn_clicked();
+
+
+};
+
+class Withering_Attack : public QDialog, private Ui::WitheringAttack
+{
+	Q_OBJECT
+
+public:
+	Withering_Attack(QDialog *parent = 0);
+	virtual ~Withering_Attack(){};
 };

@@ -278,3 +278,8 @@ Ex3E-Tracker
 Ex3E-Tracker.pro
 .DS_Store
 .ycm_extra_conf.pyc
+Makefile
+.qmake.stash
+
+ui_*.h
+moc_gui.cpp
