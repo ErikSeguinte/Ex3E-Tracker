@@ -11,7 +11,7 @@ struct character_data
 	bool is_crashed;
 	int recently_crashed;
 	bool has_gone;
-	Character *shift_target_ptr;
+	int shift_target;
 	int onslaught;
 	bool is_delayed;
 
@@ -25,12 +25,12 @@ class Character
 	bool is_crashed;
 	int recently_crashed;
 	bool has_gone;
-	Character *shift_target_ptr;
+	int shift_target;
 	int onslaught;
 	bool is_delayed;
-	static int object_count;
 	int character_number;
     public:
+	static int object_count;
 	//Constructors
 	Character();
 	Character(std::string);
@@ -43,6 +43,9 @@ class Character
 	Character get_shift_target_ptr();
 	int get_onslaught();
 	bool get_is_delayed;
+	character_data data;
+	
+	~Character();
 
 	//Setters
 	void set_name(std::string);
