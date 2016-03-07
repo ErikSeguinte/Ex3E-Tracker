@@ -22,7 +22,7 @@ int main()
 		break;
 	    case 3:
 		std::cin >> new_name;
-		tracker.add_character(new_name);		
+		tracker.addCharacter(new_name);		
 		tracker.print();
 		break;
 	    case 4:

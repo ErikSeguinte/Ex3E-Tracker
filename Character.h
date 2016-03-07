@@ -2,18 +2,19 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 #include <string>
+#include <memory>
 
 class Character;
-struct character_data
+struct CharacterData 
 {
     	std::string name;
 	int initiative;
-	bool is_crashed;
-	int recently_crashed;
-	bool has_gone;
-	int shift_target;
+	bool isCrashed;
+	int turnsSinceCrashed;
+	bool hasGone;
+	std::weak_ptr<Character> shiftTarget;
 	int onslaught;
-	bool is_delayed;
+	bool isDelayed;
 
 };
 
@@ -22,46 +23,47 @@ class Character
     private:
 	std::string name;
 	int initiative;
-	bool is_crashed;
-	int recently_crashed;
-	bool has_gone;
-	int shift_target;
+	bool isCrashed;
+	int turnsSinceCrashed;
+	bool hasGone;
+	std::weak_ptr<Character> shiftTarget;
 	int onslaught;
-	bool is_delayed;
-	int character_number;
+	bool isDelayed;
+	int characterNo;
     public:
-	static int object_count;
+	static int objectCount;
 	//Constructors
 	Character();
 	Character(std::string);
 	//Getters
-	std::string get_name();
-	int get_int();
-	bool get_crashed();
-	int get_recently_crashed();
-	bool get_has_gone();
-	Character get_shift_target_ptr();
-	int get_onslaught();
-	bool get_is_delayed;
-	character_data data;
+	std::string getName();
+	int getInt();
+	bool getCrashed();
+	int getTurnsSinceCrashed();
+	bool getHasGone();
+	Character getShiftTarget();
+	int getOnslaught();
+	bool getIsDelayed;
+	CharacterData getCharacterData();
 	
 	~Character();
 
 	//Setters
-	void set_name(std::string);
-	void set_init(int);
-	void set_crashed(bool);
-	void set_recently_crashed();
-	void set_has_gone(bool);
-	void set_shift_target_ptr(Character&);
-	void set_onslaught(int);
-	void set_is_delayed(bool);
+	void setName(std::string);
+	void setInit(int);
+	void setCrashed(bool);
+	void setRecentlyCrashed();
+	void setHasGone(bool);
+	void setShiftTarget_ptr(const std::shared_ptr<Character>& target);
+	void setOnslaught(int);
+	void setIsDelayed(bool);
 
 	//Other
-  	virtual bool check_for_crash(int damage);
-	virtual void add_onslaught(int value);
-//	virtual void take_init_damage(int value);
-//	virtual void gain_init_from_damage(int value);
+  	virtual bool checkForCrash(int damage);
+	virtual void addOnslaught(int value);
+  	virtual int takeInitDamage(int value);
+  	virtual void gainInitFromDamage(int value);
 };  
 #endif
+
 

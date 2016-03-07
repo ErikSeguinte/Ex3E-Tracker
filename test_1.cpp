@@ -11,21 +11,21 @@ SCENARIO("Characters can be added and destroyed", "[add_character]")
     
 	WHEN( "Characters are added")
 	{
-	    int characters_to_add = 1;
+	    int characters_to_add = 10;
 	    for (int i = 0; i < characters_to_add; i++)
 	    {
-		tracker.add_character(std::to_string(i));
+		tracker.addCharacter(std::to_string(i));
 	    }
 	
     
 	    THEN( "The Vector's Size should increase.")
 	    {
-		REQUIRE( tracker.get_size()== characters_to_add);
+		REQUIRE( tracker.getSize()== characters_to_add);
 	    }
 
 	    AND_THEN( "The Object count should also increase")
 	    {
-		REQUIRE(Character::object_count == characters_to_add);
+		REQUIRE(Character::objectCount == characters_to_add);
 	    }
 	}
     }

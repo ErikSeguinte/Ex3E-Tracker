@@ -8,14 +8,34 @@
 #include "Character.h"
 #include <string>
 #include<memory>
+
+struct IndividualAttackStats
+{
+    const std::shared_ptr<Character>& ptr;
+    int initiativeModifier;
+};
+
+struct attack_data
+{
+    IndividualAttackStats attacker;
+    IndividualAttackStats defender;
+    int damage;
+    bool success;
+    int cost;
+};
+
 class Tracker
+
 {
     private:
-	std::vector<std::unique_ptr<Character>> character_list;
+	std::vector<std::shared_ptr<Character>> characterList;
     public:
 	Tracker();
-	void add_character(std::string);
+	void addCharacter(std::string);
 	void print();
-	int get_size();
+	int getSize();
+
+	// Attacks
+	void performWitheringAttack(attack_data input);
 };
 #endif
