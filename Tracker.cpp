@@ -6,12 +6,12 @@
 Tracker::Tracker()
 {
 //   std::vector<Character> character_list;
-    std::vector<std::shared_ptr<Character>> characterList;
+  std::vector<std::shared_ptr<Character>> characterList;
 }
 
 void Tracker::addCharacter(std::string name)
 {
-    characterList.emplace_back(new Character(name));
+  characterList.emplace_back(new Character(name));
 }
 
 void Tracker::print()
@@ -25,12 +25,14 @@ void Tracker::print()
 }
 int Tracker::getSize()
 {
-
-    return characterList.size();
-    return -1;
+  int size = characterList.size();
+  return size;
 }
 
-void Tracker::performWitheringAttack(attack_data input)
+void Tracker::performWitheringAttack(const attack_data& input)
 {
-   //input.attacker.ptr->take_i 
+  int initGained = input.defender.ptr->takeInitDamage(input.damage); 
+  input.attacker.ptr->gainInitFromDamage(initGained);
+  input.defender.ptr->setCrashed(input.defender.ptr->getInit <= 0)
+
 }

@@ -36,6 +36,6 @@ class Tracker
 	int getSize();
 
 	// Attacks
-	void performWitheringAttack(attack_data input);
+	void performWitheringAttack(const attack_data& input);
 };
 #endif
