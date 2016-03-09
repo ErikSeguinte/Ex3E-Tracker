@@ -56,3 +56,16 @@ void Character::gainInitFromDamage(int value)
 {
 
 }
+
+bool Character::compareCharacter(const Character& a, const Character& b)
+{
+    if (a.initiative != b.initiative)
+        return (a.initiative > b.initiative);
+    else
+    {
+        if (a.hasGone != b.hasGone)
+            return !(a.hasGone);
+        return false;
+    }
+}
+

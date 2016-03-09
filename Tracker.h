@@ -37,5 +37,9 @@ class Tracker
 
 	// Attacks
 	void performWitheringAttack(const attack_data& input);
+        
+        void printTable();
+
+std::string centered( std::string const& original, int targetSize );
 };
 #endif

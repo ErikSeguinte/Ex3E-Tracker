@@ -38,9 +38,14 @@ class Character
 	//Getters
 	std::string getName();
 	int getInit() { return initiative;   };
+        std::string getInitAsString(){return std::to_string(initiative);};
 	bool getCrashed();
 	int getTurnsSinceCrashed();
 	bool getHasGone();
+        std::string getHasGoneAsString()
+        {
+            return hasGone ? "true" : "false";
+        }
 	Character getShiftTarget();
 	int getOnslaught();
 	bool getIsDelayed;
@@ -63,7 +68,9 @@ class Character
 	virtual void addOnslaught(int value);
   	virtual int takeInitDamage(int value);
   	virtual void gainInitFromDamage(int value);
-        virtual bool checkForShift(std::shared_ptr<Character> attacker);
+//      virtual bool checkForShift(std::shared_ptr<Character> attacker);
+
+        bool compareCharacter(const Character&, const Character&);
 };  
 #endif
 
