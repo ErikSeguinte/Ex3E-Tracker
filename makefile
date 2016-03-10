@@ -7,8 +7,6 @@
 CXX = g++
 CXXFLAGS = -g -Wall -std=c++11
 
-
-
 all: tracker
 
 tracker: Tracker.o Character.o cli.o

@@ -5,6 +5,7 @@
 #include <memory>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 
 std::string Tracker::centered( std::string const& original, int targetSize )
 {
@@ -33,7 +34,7 @@ void Tracker::addCharacter(std::string name)
 
 void Tracker::print()
 {
-    std::cout << centered("Name",10) << "|" <<  centered("init",10) << "|" << centered("Has Gone",10) << '\n'; 
+    std::cout << centered("Name",10) << "|" <<  centered("init",10) << "|" << centered("Has Gone",10) << "|\n"; 
     std::vector<std::shared_ptr<Character>>::iterator iter;
 
     for (iter = characterList.begin(); iter < characterList.end(); iter++)
@@ -55,3 +56,7 @@ void Tracker::performWitheringAttack(const attack_data& input)
 
 }
 
+void Tracker::sort()
+{
+  std::stable_sort(characterList.begin(), characterList.end(), comparator)
+}

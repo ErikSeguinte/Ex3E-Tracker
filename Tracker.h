@@ -34,11 +34,16 @@ class Tracker
 	void addCharacter(std::string);
 	void print();
 	int getSize();
+        std::vector<std::shared_ptr<Character>> getList()
+        {
+            return characterList;
+        }
 
 	// Attacks
 	void performWitheringAttack(const attack_data& input);
         
         void printTable();
+        void sort();
 
 std::string centered( std::string const& original, int targetSize );
 };

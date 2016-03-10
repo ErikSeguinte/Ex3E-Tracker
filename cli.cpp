@@ -5,7 +5,8 @@
 #include <cstdlib>
 #include "Tracker.h"
 int menu(Tracker&);
-int validate();
+int validateInt();
+void addCharacter(Tracker&);
 int main()
 {
     Tracker tracker;
@@ -21,8 +22,7 @@ int main()
 	    case 2:
 		break;
 	    case 3:
-		std::cin >> new_name;
-		tracker.addCharacter(new_name);		
+                addCharacter(tracker);
 		break;
 	    case 4:
 		std::exit(0);
@@ -45,27 +45,30 @@ int menu(Tracker &tracker)
 	"2) Decisive Attack\n" <<
 	"3) Add Character\n" <<
 	"4) Quit\n";
-    choice = validate();
+    choice = validateInt();
     } while (choice < 1 || choice > 4);
     return choice;
 }
 
-int validate()
+int validateInt()
 {
     int input;
-    while (true)
+    std::cin >> input;
+    while (std::cin.fail())
     {
-        std::cout << "Validating...\n";
+        std::cin.clear();
+        std::cin.ignore(1000,'\n');
+        std::cout << "Invalid choice. Please try again.\n";
         std::cin >> input;
-        if (std::cin.fail())
-        {
-            std::cin.clear();
-            std::cin.ignore(1000,'\n');
-            std::cout << "Invalid choice. Please try again.\n";
-            continue;
-        }
-        break;
     }
     return input;
 }
 
+void addCharacter(Tracker& tracker)
+{
+    std::string new_name;
+    std::cout << "Name: ";
+    std::cin >> new_name;
+    tracker.addCharacter(new_name);		
+
+}

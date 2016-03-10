@@ -55,7 +55,10 @@ class Character
 
 	//Setters
 	void setName(std::string);
-	void setInit(int);
+	void setInit(int value)
+        {
+            initiative = value;
+        }
 	void setCrashed(bool crashed) { isCrashed = crashed;     };
 	void setRecentlyCrashed();
 	void setHasGone(bool);
