@@ -5,21 +5,26 @@
 #include <memory>
 
 class Character;
-struct CharacterData 
-{
-    	std::string name;
-	int initiative;
-	bool is_crashed;
-	int turns_since_crashed;
-	bool has_gone;
-	std::weak_ptr<Character> shift_target;
-	int onslaught;
-	bool is_delayed;
+
+class CrashState {
+    private:
+     bool is_crashed_;
+     int turns_since_crashed_;
+     std::weak_ptr<Character> shift_target_;
+    };
+
+
+
+struct CharacterData {
+    std::string name;
+    int initiative;
+    bool has_gone;
+    int onslaught;
+    bool is_delayed;
 
 };
 
-class Character
-{
+class Character {
     private:
 	std::string name_;
 	int initiative_;
