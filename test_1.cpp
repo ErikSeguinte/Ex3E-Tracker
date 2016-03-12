@@ -15,13 +15,13 @@ SCENARIO("Characters can be added and destroyed", "[add_character]")
 	    int characters_to_add = 10;
 	    for (int i = 0; i < characters_to_add; i++)
 	    {
-		tracker.addCharacter(std::to_string(i));
+		tracker.AddCharacter(std::to_string(i));
 	    }
 	
     
 	    THEN( "The Vector's Size should increase.")
 	    {
-		REQUIRE( tracker.getSize()== characters_to_add);
+		REQUIRE( tracker.size()== characters_to_add);
 	    }
 
 	    AND_THEN( "The Object count should also increase")
@@ -37,18 +37,28 @@ SCENARIO("Characters can be added and destroyed", "[add_character]")
         int characters_to_add = 10;
         for (int i = 0; i < characters_to_add; i++)
         {
-            tracker.addCharacter(std::to_string(i));
-            tracker.getList()[i]->setInit(i);
+            tracker.AddCharacter(std::to_string(i));
+            tracker.character_list()[i]->setInit(i);
         }  
-        tracker.print();
 
         WHEN("They are sorted")
         {
-            tracker.sort()
+            tracker.sort();
                 THEN("Characters should be sorted from Highest to lowest")
                 {
                     //test stuff
+                    REQUIRE(tracker.character_list()[0]->initiative() == characters_to_add - 1);
                 }
+        }
+        AND_WHEN("A character has taken their turn, ")
+        {
+            tracker.sort();
+            tracker.character_list()[0]->setHasGone(true) ;
+            tracker.print();
+            tracker.sort();
+            tracker.print();
+            THEN("They should drop to the bottom")
+                REQUIRE(tracker.character_list()[0]->initiative() == characters_to_add - 2);
         }
     }
 }

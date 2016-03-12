@@ -9,47 +9,58 @@ struct CharacterData
 {
     	std::string name;
 	int initiative;
-	bool isCrashed;
-	int turnsSinceCrashed;
-	bool hasGone;
-	std::weak_ptr<Character> shiftTarget;
+	bool is_crashed;
+	int turns_since_crashed;
+	bool has_gone;
+	std::weak_ptr<Character> shift_target;
 	int onslaught;
-	bool isDelayed;
+	bool is_delayed;
 
 };
 
 class Character
 {
     private:
-	std::string name;
-	int initiative;
-	bool isCrashed;
-	int turnsSinceCrashed;
-	bool hasGone;
-	std::weak_ptr<Character> shiftTarget;
-	int onslaught;
-	bool isDelayed;
-	int characterNo;
+	std::string name_;
+	int initiative_;
+	bool is_crashed_;;
+	int turns_since_crashed_;
+	bool has_gone_;
+	std::weak_ptr<Character> shift_target_;
+	int onslaught_;
+	bool is_delayed_;
+	int character_number_;
     public:
 	static int objectCount;
 	//Constructors
 	Character();
 	Character(std::string);
 	//Getters
-	std::string getName();
-	int getInit() { return initiative;   };
-        std::string getInitAsString(){return std::to_string(initiative);};
-	bool getCrashed();
-	int getTurnsSinceCrashed();
-	bool getHasGone();
-        std::string getHasGoneAsString()
-        {
-            return hasGone ? "true" : "false";
+	std::string name() const {
+            return name_;
         }
-	Character getShiftTarget();
-	int getOnslaught();
-	bool getIsDelayed;
-	CharacterData getCharacterData();
+	int initiative() const {
+            return initiative_;
+        }
+        std::string initiative_as_string() const {
+            return std::to_string(initiative_);
+        }
+	bool is_crashed() const {
+            return is_crashed_;
+        }
+	int turns_since_crashed() const {
+            return turns_since_crashed_;
+        }
+	bool has_gone() const {
+            return has_gone_;
+        }
+        std::string has_gone_as_string() const {
+            return has_gone_ ? "true" : "false";
+        }
+	Character shift_target() const;
+	int onslaught() const;
+	bool is_delayed() const;;
+	CharacterData character_data() const;;
 	
 	~Character();
 
@@ -57,11 +68,14 @@ class Character
 	void setName(std::string);
 	void setInit(int value)
         {
-            initiative = value;
+            initiative_ = value;
         }
-	void setCrashed(bool crashed) { isCrashed = crashed;     };
+	void setCrashed(bool crashed) { is_crashed_ = crashed;     };
 	void setRecentlyCrashed();
-	void setHasGone(bool);
+	void setHasGone(bool boolean)
+        {
+            has_gone_ = boolean;
+        }
 	void setShiftTarget_ptr(const std::shared_ptr<Character>& target);
 	void setOnslaught(int);
 	void setIsDelayed(bool);
@@ -73,7 +87,7 @@ class Character
   	virtual void gainInitFromDamage(int value);
 //      virtual bool checkForShift(std::shared_ptr<Character> attacker);
 
-        bool compareCharacter(const Character&, const Character&);
+        static bool compareCharacter(const Character&, const Character&);
 };  
 #endif
 

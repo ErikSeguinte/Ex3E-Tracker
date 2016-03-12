@@ -69,6 +69,6 @@ void addCharacter(Tracker& tracker)
     std::string new_name;
     std::cout << "Name: ";
     std::cin >> new_name;
-    tracker.addCharacter(new_name);		
+    tracker.AddCharacter(new_name);		
 
 }

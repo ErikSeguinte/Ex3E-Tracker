@@ -24,27 +24,25 @@ struct attack_data
     int cost;
 };
 
-class Tracker
-
-{
+class Tracker {
     private:
-	std::vector<std::shared_ptr<Character>> characterList;
+     std::vector<std::shared_ptr<Character>> character_list_;
     public:
-	Tracker();
-	void addCharacter(std::string);
-	void print();
-	int getSize();
-        std::vector<std::shared_ptr<Character>> getList()
-        {
-            return characterList;
-        }
+     Tracker();
+     static bool comparator(const std::shared_ptr<Character>& left, const std::shared_ptr<Character>& right);
+     static bool comparatorTurn(const std::shared_ptr<Character>& left, const std::shared_ptr<Character>& right);
+     void AddCharacter(std::string);
+     void print();
+     int size() const;
+     std::vector<std::shared_ptr<Character>> character_list() const {
+         return character_list_;
+     }
 
-	// Attacks
-	void performWitheringAttack(const attack_data& input);
-        
-        void printTable();
-        void sort();
+     // Attacks
+     void performWitheringAttack(const attack_data& input);
+     
+     void sort();
 
-std::string centered( std::string const& original, int targetSize );
+     std::string centered( std::string const& original, int targetSize );
 };
 #endif
