@@ -7,11 +7,11 @@
 #include <iomanip>
 #include <algorithm>
 
-IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> &actor) :
+IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> actor) :
     ptr(actor),
     initiativeModifier() {};
 
-IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> &actor, int modifier):
+IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> actor, int modifier):
     ptr(actor),
     initiativeModifier(modifier){};
 

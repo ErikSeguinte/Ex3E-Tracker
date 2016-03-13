@@ -65,17 +65,15 @@ SCENARIO("A tracker exists.") {
     tracker.AddCharacter("A");
     tracker.AddCharacter("B");
     tracker.AddCharacter("C");
-    std::shared_ptr<Character> &A (tracker.character_list()[0]);
-    std::shared_ptr<Character> &B (tracker.character_list()[1]);
     std::shared_ptr<Character> &C (tracker.character_list()[2]);
-    A->setInit(10);
-    B->setInit(10);
-    C->setInit(10);
+    tracker.character_list()[0]->setInit(10);
+    tracker.character_list()[1]->setInit(10);
+    tracker.character_list()[2]->setInit(10);
     tracker.print();
 
     GIVEN("A, B, and C exists") {
-        IndividualAttackStats attacker(A, 0);
-        IndividualAttackStats defender(C, 0);
+        IndividualAttackStats attacker(tracker.character_list()[0], 0);
+        IndividualAttackStats defender(tracker.character_list()[2], 0);
 
         attack_data data(attacker, defender);
         data.damage = 5;
@@ -86,7 +84,7 @@ SCENARIO("A tracker exists.") {
             tracker.performWitheringAttack(data);
             
             THEN("A should have 11 initiative, and C should have 5"){
-                REQUIRE(A->initiative()==11);
+                REQUIRE(tracker.character_list()[0]->initiative()==11);
             }
         }
     }

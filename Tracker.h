@@ -11,11 +11,11 @@
 
 struct IndividualAttackStats
 {
-    std::shared_ptr<Character> &ptr;
+    std::shared_ptr<Character> ptr;
     int initiativeModifier;
    
-    IndividualAttackStats(std::shared_ptr<Character> &, int);
-    IndividualAttackStats(std::shared_ptr<Character>&);
+    IndividualAttackStats(std::shared_ptr<Character> , int);
+    IndividualAttackStats(std::shared_ptr<Character>);
 };
 
 struct attack_data
