@@ -7,6 +7,15 @@
 #include <iomanip>
 #include <algorithm>
 
+IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> &actor) :
+    ptr(actor),
+    initiativeModifier() {};
+
+IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> &actor, int modifier):
+    ptr(actor),
+    initiativeModifier(modifier){};
+
+
 std::string Tracker::centered( std::string const& original, int targetSize ) {
     std::string word = original;
     if (static_cast<int>( original.size() ) % 2 == 1)
@@ -29,14 +38,15 @@ void Tracker::AddCharacter(std::string name) {
 }
 
 void Tracker::print() {
-    std::cout << centered("Name",10) << "|" <<  centered("init",10) << "|" << centered("Has Gone",10) << "|\n"; 
     std::cout << "---------------------------------\n";
+    std::cout << centered("Name",10) << "|" <<  centered("init",10) << "|" << centered("Has Gone",10) << "|\n"; 
+    std::cout << "=================================\n";
     std::vector<std::shared_ptr<Character>>::iterator iter;
 
     for (iter = character_list_.begin(); iter < character_list_.end(); iter++) {
   	std::cout << centered((*iter)->name(),10) << '|' << centered((*iter)->initiative_as_string(),10) << '|' << centered((*iter)->has_gone_as_string(),10) << '|' << '\n';
     }
-    std::cout << "---------------------------------\n";
+    std::cout << "=================================\n";
 }
 int Tracker::size() const  {
   int size = character_list_.size();

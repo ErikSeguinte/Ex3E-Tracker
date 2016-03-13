@@ -11,8 +11,11 @@
 
 struct IndividualAttackStats
 {
-    const std::shared_ptr<Character>& ptr;
+    std::shared_ptr<Character> &ptr;
     int initiativeModifier;
+   
+    IndividualAttackStats(std::shared_ptr<Character> &, int);
+    IndividualAttackStats(std::shared_ptr<Character>&);
 };
 
 struct attack_data
@@ -22,6 +25,10 @@ struct attack_data
     int damage;
     bool success;
     int cost;
+
+    attack_data(IndividualAttackStats actor1, IndividualAttackStats actor2) :
+        attacker(actor1),
+        defender(actor2){}
 };
 
 class Tracker {

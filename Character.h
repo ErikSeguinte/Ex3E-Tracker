@@ -8,9 +8,19 @@ class Character;
 
 class CrashState {
     private:
+     int &initiative_;
      bool is_crashed_;
      int turns_since_crashed_;
      std::weak_ptr<Character> shift_target_;
+    public:
+     CrashState(int &);
+     bool state() const {
+         return is_crashed_;
+     }
+     bool bonus() const;
+     void StartCrash();
+     void decrement_turns_since_crashed();
+     void EndCrash();
     };
 
 
@@ -35,6 +45,7 @@ class Character {
 	int onslaught_;
 	bool is_delayed_;
 	int character_number_;
+        CrashState crash;
     public:
 	static int objectCount;
 	//Constructors
@@ -51,10 +62,7 @@ class Character {
             return std::to_string(initiative_);
         }
 	bool is_crashed() const {
-            return is_crashed_;
-        }
-	int turns_since_crashed() const {
-            return turns_since_crashed_;
+            return crash.state();
         }
 	bool has_gone() const {
             return has_gone_;
