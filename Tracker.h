@@ -11,7 +11,7 @@
 
 struct IndividualAttackStats
 {
-    std::shared_ptr<Character> ptr;
+    std::weak_ptr<Character> ptr;
     int initiativeModifier;
    
     IndividualAttackStats(std::shared_ptr<Character> , int);

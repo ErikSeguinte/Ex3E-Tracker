@@ -54,11 +54,12 @@ int Character::takeInitDamage( int value ) {
     
     initiative_ -= value;
     initGained += value;
+
     return initGained;
 }
 
 void Character::gainInitFromDamage(int value) {
-
+    initiative_ += value;
 }
 
 bool Character::compareCharacter(const Character& a, const Character& b) {

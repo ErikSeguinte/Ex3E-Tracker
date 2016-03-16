@@ -8,11 +8,11 @@
 #include <algorithm>
 
 IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> actor) :
-    ptr(actor),
+    ptr(std::weak_ptr<Character>(actor)),
     initiativeModifier() {};
 
 IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> actor, int modifier):
-    ptr(actor),
+    ptr(std::weak_ptr<Character>(actor)),
     initiativeModifier(modifier){};
 
 
@@ -55,9 +55,10 @@ int Tracker::size() const  {
 
 void Tracker::performWitheringAttack(const attack_data& input)
 {
-  int initGained = input.defender.ptr->takeInitDamage(input.damage); 
-  input.attacker.ptr->gainInitFromDamage(initGained);
-  input.defender.ptr->setCrashed(input.defender.ptr->initiative() <= 0);
+    std::cerr << input.damage;
+  int initGained = input.defender.ptr.lock()->takeInitDamage(input.damage); 
+  input.attacker.ptr.lock()->gainInitFromDamage(initGained + 1);
+  input.defender.ptr.lock()->setCrashed(input.defender.ptr.lock()->initiative() <= 0);
 
 }
 

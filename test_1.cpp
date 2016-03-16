@@ -83,8 +83,8 @@ SCENARIO("A tracker exists.") {
         WHEN("A attacks C for 5 damage") {
             tracker.performWitheringAttack(data);
             
-            THEN("A should have 11 initiative, and C should have 5"){
-                REQUIRE(tracker.character_list()[0]->initiative()==11);
+            THEN("A should have 16 initiative, and C should have 5"){
+                REQUIRE(tracker.character_list()[0]->initiative()==16);
             }
         }
     }
