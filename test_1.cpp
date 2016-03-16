@@ -65,26 +65,35 @@ SCENARIO("A tracker exists.") {
     tracker.AddCharacter("A");
     tracker.AddCharacter("B");
     tracker.AddCharacter("C");
-    std::shared_ptr<Character> &C (tracker.character_list()[2]);
-    tracker.character_list()[0]->setInit(10);
-    tracker.character_list()[1]->setInit(10);
-    tracker.character_list()[2]->setInit(10);
+
+    std::weak_ptr<Character> A (tracker.character_list()[0]);
+    std::weak_ptr<Character> B (tracker.character_list()[1]);
+    std::weak_ptr<Character> C (tracker.character_list()[2]);
+
+    A.lock()->setInit(10);
+    B.lock()->setInit(10);
+    C.lock()->setInit(10);
     tracker.print();
 
     GIVEN("A, B, and C exists") {
-        IndividualAttackStats attacker(tracker.character_list()[0], 0);
-        IndividualAttackStats defender(tracker.character_list()[2], 0);
+        IndividualAttackStats attacker(A.lock(), 0);
+        IndividualAttackStats defender(C.lock(), 0);
 
         attack_data data(attacker, defender);
-        data.damage = 5;
+        data.damage = 7;
         data.success = true;
         data.cost = 0;
 
         WHEN("A attacks C for 5 damage") {
             tracker.performWitheringAttack(data);
+            tracker.print();
             
             THEN("A should have 16 initiative, and C should have 5"){
-                REQUIRE(tracker.character_list()[0]->initiative()==16);
+                REQUIRE(A.lock()->initiative()==16);
+            }
+            THEN("Initiative Order should be B, C, then A") {
+
+                REQUIRE(tracker.character_list()[0]->name()=="B");
             }
         }
     }

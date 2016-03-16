@@ -38,7 +38,8 @@ void Tracker::AddCharacter(std::string name) {
 }
 
 void Tracker::print() {
-    std::cout << "---------------------------------\n";
+    sort();
+    std::cout << "\n---------------------------------\n";
     std::cout << centered("Name",10) << "|" <<  centered("init",10) << "|" << centered("Has Gone",10) << "|\n"; 
     std::cout << "=================================\n";
     std::vector<std::shared_ptr<Character>>::iterator iter;
@@ -55,7 +56,6 @@ int Tracker::size() const  {
 
 void Tracker::performWitheringAttack(const attack_data& input)
 {
-    std::cerr << input.damage;
   int initGained = input.defender.ptr.lock()->takeInitDamage(input.damage); 
   input.attacker.ptr.lock()->gainInitFromDamage(initGained + 1);
   input.defender.ptr.lock()->setCrashed(input.defender.ptr.lock()->initiative() <= 0);
