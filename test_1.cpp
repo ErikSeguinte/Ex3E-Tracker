@@ -73,20 +73,19 @@ SCENARIO("A tracker exists.") {
     A.lock()->setInit(10);
     B.lock()->setInit(10);
     C.lock()->setInit(10);
-    tracker.print();
 
     GIVEN("A, B, and C exists") {
         IndividualAttackStats attacker(A.lock(), 0);
         IndividualAttackStats defender(C.lock(), 0);
 
         attack_data data(attacker, defender);
-        data.damage = 7;
+        data.damage = 5;
         data.success = true;
         data.cost = 0;
 
         WHEN("A attacks C for 5 damage") {
             tracker.performWitheringAttack(data);
-            tracker.print();
+            tracker.sort();
             
             THEN("A should have 16 initiative, and C should have 5"){
                 REQUIRE(A.lock()->initiative()==16);
@@ -95,6 +94,23 @@ SCENARIO("A tracker exists.") {
 
                 REQUIRE(tracker.character_list()[0]->name()=="B");
             }
+            AND_WHEN("B and C Attack,") {
+                data.attacker.ptr = B.lock();
+                data.defender.ptr = A.lock();
+                tracker.performWitheringAttack(data);
+                tracker.sort();
+                CHECK(tracker.character_list()[0]->name()=="C");
+                data.attacker.ptr = C.lock();
+                data.defender.ptr = A.lock();
+                tracker.performWitheringAttack(data);
+                tracker.print();
+
+                THEN("Turns should refresh") {
+                    bool turns_refreshed = (A.lock()->has_gone() == false && B.lock()->has_gone() == false && C.lock()->has_gone() == false);
+                    REQUIRE(turns_refreshed);
+                }            
+            }
+
         }
     }
 }

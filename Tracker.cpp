@@ -58,6 +58,7 @@ void Tracker::performWitheringAttack(const attack_data& input)
 {
   int initGained = input.defender.ptr.lock()->takeInitDamage(input.damage); 
   input.attacker.ptr.lock()->gainInitFromDamage(initGained + 1);
+  input.attacker.ptr.lock()->setHasGone(true);
   input.defender.ptr.lock()->setCrashed(input.defender.ptr.lock()->initiative() <= 0);
 
 }
@@ -68,9 +69,10 @@ void Tracker::sort() {
 }
 
 bool Tracker::comparator(const std::shared_ptr<Character>& left, const std::shared_ptr<Character>& right) {
-    return Character::compareCharacter(*left, *right);
+    //return Character::compareCharacter(*left, *right);
+    return left->initiative() > right->initiative();
 }
 
 bool Tracker::comparatorTurn(const std::shared_ptr<Character>& left, const std::shared_ptr<Character>& right) {
-    return !(left->has_gone());
+    return left->has_gone() < right->has_gone();
 }
