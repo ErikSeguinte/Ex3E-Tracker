@@ -2,6 +2,7 @@
 #include "Tracker.h"
 #include "Tracker.h"
 #include "Character.h"
+#include "pod.h"
 
 SCENARIO("Characters can be added and destroyed", "[add_character]") {
   GIVEN("A tracker exists") {
@@ -99,7 +100,7 @@ SCENARIO("A tracker exists.") {
             REQUIRE(B.lock()->initiative() == 28);
           }
           THEN("B should be A's shift target"){
-           auto shift_target = A.lock()->crash_state().shift_target();
+          std::weak_ptr<Character> shift_target = A.lock()->crash_state()->shift_target();
            CHECK(shift_target.lock());
            if (shift_target.lock()) {
              REQUIRE(shift_target.lock() == B.lock());

@@ -6,24 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-
-IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> actor) :
-  ptr(std::weak_ptr<Character>(actor)),
-  initiativeModifier() {}
-
-IndividualAttackStats::IndividualAttackStats(std::shared_ptr<Character> actor,
-    int modifier):
-  ptr(std::weak_ptr<Character>(actor)),
-  initiativeModifier(modifier) {}
-
-IndividualAttackStats::IndividualAttackStats(std::weak_ptr<Character> actor,
-    int modifier):
-  ptr(actor),
-  initiativeModifier(modifier) {}
-
-IndividualAttackStats::IndividualAttackStats(std::weak_ptr<Character> actor):
-  ptr(actor),
-  initiativeModifier(0) {}
+#include "pod.h"
 
 std::string Tracker::centered(std::string const& original, int targetSize) {
   std::string word = original;

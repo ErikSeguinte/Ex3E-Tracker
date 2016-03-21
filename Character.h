@@ -5,6 +5,7 @@
 #include <memory>
 
 class Character;
+struct attack_data;
 
 class CrashState {
  private:
@@ -22,6 +23,7 @@ class CrashState {
   void StartCrash();
   void decrement_turns_since_crashed();
   void EndCrash();
+  std::weak_ptr<Character> shift_target();
 };
 
 struct CharacterData {
@@ -72,8 +74,9 @@ class Character {
   Character shift_target() const;
   int onslaught() const;
   bool is_delayed() const;;
-  CharacterData character_data() const;;
+  CharacterData character_data() const;
   ~Character();
+  CrashState * const crash_state()  ;
   // Setters
   void setName(std::string);
   void setInit(int value) {

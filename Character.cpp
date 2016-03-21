@@ -41,6 +41,12 @@ bool Character::checkForCrash(int damage) {
   return false;
 }
 
+CrashState * const Character::crash_state() {
+  CrashState * ptr;
+  ptr = &crash;
+  return ptr;
+}
+
 void Character::addOnslaught(int value) {
   onslaught_++;
 }
@@ -67,3 +73,6 @@ bool Character::compareCharacter(const Character& a, const Character& b) {
   return (a.initiative_ < b.initiative_);
 }
 
+std::weak_ptr<Character> CrashState::shift_target() {
+  return shift_target_;
+}
