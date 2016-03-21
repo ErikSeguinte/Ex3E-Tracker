@@ -96,13 +96,32 @@ SCENARIO("A tracker exists.") {
           tracker.performWitheringAttack(data);
           CHECK(A.lock()->initiative() == 0);
           THEN("B Should get a crash bonus.") {
-            tracker.print();
             REQUIRE(B.lock()->initiative() == 28);
+          }
+          THEN("B should be A's shift target"){
+           auto shift_target = A.lock()->crash_state().shift_target();
+           CHECK(shift_target.lock());
+           if (shift_target.lock()) {
+             REQUIRE(shift_target.lock() == B.lock());
+           }
+          }
+          AND_WHEN("C attacks A") {
+            data.attacker.ptr = C;
+            data.damage = 1;
+            tracker.print();
+            CHECK(tracker.character_list()[0]->name() == "C");
+            tracker.performWitheringAttack(data);
+            tracker.print();
+
+              THEN("C should NOT get a crash bonus") {
+                REQUIRE(C.lock()->initiative()==13);
+              }
           }
         }
       }
     }
   }
 }
+
 
 
