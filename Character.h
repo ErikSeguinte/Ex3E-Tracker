@@ -3,6 +3,7 @@
 #define CHARACTER_H_
 #include <string>
 #include <memory>
+#include "pod.h"
 
 class Character;
 struct attack_data;
@@ -20,7 +21,7 @@ class CrashState {
     return is_crashed_;
   }
   bool bonus() const;
-  void StartCrash();
+  void StartCrash(std::weak_ptr<Character> attacker);
   void decrement_turns_since_crashed();
   void EndCrash();
   std::weak_ptr<Character> shift_target();
@@ -94,9 +95,9 @@ class Character {
   void setIsDelayed(bool value);
 
   // Other
-  virtual bool checkForCrash(int damage);
+  virtual bool checkForCrash(const attack_data &data);
   virtual void addOnslaught(int value);
-  virtual int takeInitDamage(int value);
+  virtual int takeInitDamage(const attack_data &data);
   virtual void gainInitFromDamage(int value);
 //      virtual bool checkForShift(std::shared_ptr<Character> attacker);
 

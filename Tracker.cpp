@@ -50,7 +50,7 @@ int Tracker::size() const  {
 }
 
 void Tracker::performWitheringAttack(const attack_data& input) {
-  int initGained = input.defender.ptr.lock()->takeInitDamage(input.damage);
+  int initGained = input.defender.ptr.lock()->takeInitDamage(input);
   input.attacker.ptr.lock()->gainInitFromDamage(initGained + 1);
   input.attacker.ptr.lock()->setHasGone(true);
   input.defender.ptr.lock()->setCrashed(

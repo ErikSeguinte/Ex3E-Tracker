@@ -15,8 +15,6 @@ bool CrashState::bonus() const {
   return true;
 }
 
-void CrashState::StartCrash() {
-}
 
 int Character::objectCount;
 Character::Character() : Character(("Character #" +
@@ -32,14 +30,21 @@ Character::Character(std::string name): initiative_(0), crash(initiative_) {
 }
 
 
-bool Character::checkForCrash(int damage) {
-  bool isCrashedByAttack = (initiative_ > 0 && (initiative_ - damage) <= 0);
+bool Character::checkForCrash(const attack_data &data) {
+  bool isCrashedByAttack = (initiative_ > 0 && (initiative_ - data.damage) <= 0);
   if (isCrashedByAttack) {
-    crash.StartCrash();
+    crash.StartCrash(data.attacker.ptr);
     return true;
   }
   return false;
 }
+
+void CrashState::StartCrash(std::weak_ptr<Character> attacker) {
+  shift_target_ = attacker;
+  is_crashed_ = true;
+  turns_since_crashed_ = 3;
+}
+
 
 CrashState * const Character::crash_state() {
   CrashState * ptr;
@@ -55,12 +60,12 @@ Character::~Character() {
   objectCount--;
 }
 
-int Character::takeInitDamage(int value) {
+int Character::takeInitDamage(const attack_data &data) {
   int initGained = 0;
-  if (checkForCrash(value) && crash.bonus())
+  if (checkForCrash(data) && crash.bonus())
     initGained += 5;
-  initiative_ -= value;
-  initGained += value;
+  initiative_ -= data.damage;
+  initGained += data.damage;
 
   return initGained;
 }
