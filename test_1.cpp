@@ -1,8 +1,7 @@
 #include "catch.hpp"
 #include "Tracker.h"
-#include "Tracker.h"
 #include "Character.h"
-#include "pod.h"
+#include "./pod.h"
 
 SCENARIO("Characters can be added and destroyed", "[add_character]") {
   GIVEN("A tracker exists") {
@@ -58,16 +57,16 @@ SCENARIO("A tracker exists.") {
   A.lock()->setInit(10);
   B.lock()->setInit(10);
   C.lock()->setInit(10);
+  IndividualAttackStats attacker(A);
+  IndividualAttackStats defender(C);
+  attack_data data(attacker, defender);
   GIVEN("A, B, and C exists") {
-    IndividualAttackStats attacker(A);
-    IndividualAttackStats defender(C);
-    attack_data data(attacker, defender);
+    data.SetCombatants(A, C);
     data.damage = 5;
     data.success = true;
     data.cost = 0;
     WHEN("A attacks C for 5 damage") {
       tracker.performWitheringAttack(data);
-      tracker.sort();
       THEN("A should have 16 initiative, and C should have 5") {
         REQUIRE(A.lock()->initiative() == 16);
       }
@@ -75,15 +74,11 @@ SCENARIO("A tracker exists.") {
         REQUIRE(tracker.character_list()[0]->name() == "B");
       }
       AND_WHEN("B and C Attack,") {
-        data.attacker.ptr = B;
-        data.defender.ptr = A;
+        data.SetCombatants(B, A);
         tracker.performWitheringAttack(data);
-        tracker.sort();
-        CHECK(tracker.character_list()[0]->name() == "C");
-        data.attacker.ptr = C.lock();
-        data.defender.ptr = A.lock();
+        CHECK(tracker.character_list()[0]->name() == "C"); // NOLINT
+        data.SetCombatants(C, A);
         tracker.performWitheringAttack(data);
-        tracker.print();
         THEN("Turns should refresh") {
           bool turns_refreshed = (A.lock()->has_gone() == false
               && B.lock()->has_gone() == false
@@ -95,34 +90,131 @@ SCENARIO("A tracker exists.") {
           data.defender.ptr = A;
           data.damage = 6;
           tracker.performWitheringAttack(data);
-          CHECK(A.lock()->initiative() == 0);
+          CHECK(A.lock()->initiative() == 0); // NOLINT
           THEN("B Should get a crash bonus.") {
             REQUIRE(B.lock()->initiative() == 28);
           }
-          THEN("B should be A's shift target"){
-          std::weak_ptr<Character> shift_target = A.lock()->crash_state()->shift_target();
-           CHECK(shift_target.lock());
-           if (shift_target.lock()) {
-             REQUIRE(shift_target.lock() == B.lock());
-           }
+          THEN("B should be A's shift target") {
+            std::weak_ptr<Character> shift_target =
+              A.lock()->crash_state()->shift_target();
+            CHECK(shift_target.lock()); // NOLINT
+            if (shift_target.lock()) {
+              REQUIRE(shift_target.lock() == B.lock());
+            }
           }
           AND_WHEN("C attacks A") {
             data.attacker.ptr = C;
             data.damage = 1;
-            tracker.print();
-            CHECK(tracker.character_list()[0]->name() == "C");
+            CHECK(tracker.character_list()[0]->name() == "C"); // NOLINT
             tracker.performWitheringAttack(data);
-            tracker.print();
 
-              THEN("C should NOT get a crash bonus") {
-                REQUIRE(C.lock()->initiative()==13);
-              }
+            THEN("C should NOT get a crash bonus") {
+              REQUIRE(C.lock()->initiative() == 13);
+            }
           }
         }
       }
     }
   }
+
+  GIVEN("A crashes C") {
+    data.damage = 10;
+
+    tracker.performWitheringAttack(data);
+    CHECK(C.lock()->is_crashed() == true);
+
+    WHEN("C rises above 0 Initiative") {
+      data.SetCombatants(B,C);
+      data.damage = 1;
+      tracker.performWitheringAttack(data);
+      data.SetCombatants(C, A);
+      data.damage = 11;
+      tracker.performWitheringAttack(data);
+      THEN("C should no longer be crashed") {
+        REQUIRE(C.lock()->is_crashed() == false);
+      }
+      
+      AND_WHEN("C is crashed again...") {
+        data.SetCombatants(A, C);
+        tracker.performWitheringAttack(data);
+        CHECK(C.lock()->is_crashed());
+        THEN("A should not recieve a crash Bonus") {
+          REQUIRE(A.lock()->initiative() == (15 + 11 + 1));
+        }
+      }
+
+      AND_WHEN("C is crashed after surving 2 end-of-rounds") {
+        tracker.print();
+
+        data.damage = 1;
+        data.SetCombatants(A, B);
+        tracker.performWitheringAttack(data);
+        data.SetCombatants(B, C);
+        tracker.performWitheringAttack(data);
+        data.SetCombatants(C, A);
+        tracker.performWitheringAttack(data);
+        REQUIRE(C.lock()->is_crashed() == false);
+        THEN("A should recieve a crash bonus") {
+          tracker.print();
+          data.damage = 12;
+          data.SetCombatants(A, C);
+          tracker.performWitheringAttack(data);
+          REQUIRE(A.lock()->initiative() == (16 + 12 + 5 + 1));
+        }
+      }
+
+    }
+
+
+//  WHEN("C takes 3 turns") {
+//    data.SetCombatants(B, C);
+//    data.damage = 0;
+//    tracker.performWitheringAttack(data);
+//    data.SetCombatants(C, A);
+//    tracker.performWitheringAttack(data);
+//    bool new_round = (A.lock()->has_gone() == false && B.lock()->has_gone() == false && C.lock()->has_gone() == false);
+//    CHECK(new_round);
+//    CHECK(C.lock()->is_crashed());
+
+//    //  Round 2
+//    data.SetCombatants(A,B);
+//    tracker.performWitheringAttack(data);
+//    data.SetCombatants(B, C);
+//    tracker.performWitheringAttack(data);
+//    data.SetCombatants(C, A);
+//    tracker.performWitheringAttack(data);
+//    new_round = (A.lock()->has_gone() == false && B.lock()->has_gone() == false && C.lock()->has_gone() == false);
+//    CHECK(new_round);
+//    CHECK(C.lock()->is_crashed());
+
+//    //  Round 3
+//    data.SetCombatants(A,B);
+//    tracker.performWitheringAttack(data);
+//    data.SetCombatants(B, C);
+//    tracker.performWitheringAttack(data);
+//    data.SetCombatants(C, A);
+//    tracker.performWitheringAttack(data);
+//    new_round = (A.lock()->has_gone() == false && B.lock()->has_gone() == false && C.lock()->has_gone() == false);
+//    CHECK(new_round);
+//    CHECK(C.lock()->is_crashed());
+
+//    //  Round 4
+//    data.SetCombatants(A,B);
+//    tracker.performWitheringAttack(data);
+//    data.SetCombatants(B, C);
+//    tracker.performWitheringAttack(data);
+//    data.SetCombatants(C, A);
+//    tracker.performWitheringAttack(data);
+//    new_round = (A.lock()->has_gone() == false && B.lock()->has_gone() == false && C.lock()->has_gone() == false);
+//    CHECK(new_round);
+//    tracker.print();
+
+//    THEN("C should no longer be crashed at the start of his turn.") {
+//      REQUIRE(C.lock()->is_crashed() == false);
+//    }
+
+//  }
+  }
+
+
 }
-
-
-

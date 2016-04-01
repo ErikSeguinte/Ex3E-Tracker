@@ -21,6 +21,8 @@ struct attack_data {
   int cost;
 
   attack_data(IndividualAttackStats, IndividualAttackStats);
+  
+  void SetCombatants(std::weak_ptr<Character>, std::weak_ptr<Character>);
 };
 
 #endif  // POD_H_

@@ -3,7 +3,7 @@
 #define CHARACTER_H_
 #include <string>
 #include <memory>
-#include "pod.h"
+#include "./pod.h"
 
 class Character;
 struct attack_data;
@@ -12,7 +12,8 @@ class CrashState {
  private:
   int &initiative_;
   bool is_crashed_;
-  int turns_since_crashed_;
+  int rounds_since_crash_recovery_;
+  int turns_remaining_in_crash_;
   std::weak_ptr<Character> shift_target_;
 
  public:
@@ -22,9 +23,12 @@ class CrashState {
   }
   bool bonus() const;
   void StartCrash(std::weak_ptr<Character> attacker);
-  void decrement_turns_since_crashed();
+  void increment_rounds_since_crash_recovery();
   void EndCrash();
   std::weak_ptr<Character> shift_target();
+  void CrashCountdown();
+  void DetermineCrash();
+  void DetermineCrash(std::weak_ptr<Character>);
 };
 
 struct CharacterData {
@@ -66,6 +70,9 @@ class Character {
   bool is_crashed() const {
     return crash.state();
   }
+  std::string is_crashed_as_string() const {
+    return crash.state() ? "true" : "false";
+  }
   bool has_gone() const {
     return has_gone_;
   }
@@ -77,7 +84,7 @@ class Character {
   bool is_delayed() const;;
   CharacterData character_data() const;
   ~Character();
-  CrashState * const crash_state()  ;
+  CrashState * const crash_state();
   // Setters
   void setName(std::string);
   void setInit(int value) {
